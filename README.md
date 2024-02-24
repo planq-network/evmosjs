@@ -367,3 +367,40 @@ const broadcastPost = await fetch(
 
 const response = await broadcastPost.json()
 ```
+
+
+### Troubleshooting
+#### Error
+```
+npm ERR! 404 Not Found - GET https://registry.npmjs.org/@buf%2fcosmos_cosmos-sdk.bufbuild_es - Not found
+```
+#### Solution
+set the custom registry for buf.build with the following command:
+```
+for npm run:
+npm config set @buf:registry https://buf.build/gen/npm/v1
+
+for yarn:
+use the .yarnrc included in this repository
+```
+
+#### Error
+```
+Cannot find module '@buf/evmos_evmos.bufbuild_es/evmos/vesting/v1/tx_pb.js'
+```
+#### Solution
+add the following override into your package.json and remove your package-lock.json or yarn.lock file.
+```json
+  "overrides": {
+    "@buf/evmos_evmos.bufbuild_es": "npm:@buf/evmos_evmos.bufbuild_es@commit-c66c6f141d044e31a4ae77f5b852bcb5"
+  }
+```
+#### Error
+```
+Error: Unsupported type: '/ethermint.types.v1.EthAccount'
+```
+#### Solution
+```
+You are using cosmjs instead of evmosjs to sign your transaction. 
+Add "evmosjs": "^0.3.3" as dependency AND the override from above into your package.json and replace the tx signing function with the steps explained above.
+```
